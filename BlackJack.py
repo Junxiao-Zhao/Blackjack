@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 from random import choices
 
@@ -12,7 +13,7 @@ class BlackJack:
         :param n_side: the number of sides each dice
         :param l_target: the lower bound of winning
         :param u_target: the upper bound of winning
-        :param n_game: the number of games
+        :param n_game: the number of times to play
         :param m: the hyperparameter
         """
 
@@ -57,7 +58,8 @@ class BlackJack:
     def play(self) -> None:
         """Play the game n times and write the output the file"""
 
-        for _ in range(self.n_game):
+        for i in range(self.n_game):
+            print("Round %d" % i)
             self.play_once()
 
         correct_dices = np.zeros((self.l_target, self.l_target))
@@ -144,23 +146,44 @@ class BlackJack:
 
 
 if __name__ == "__main__":
-    """ lose_count = np.array([[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
-                            [0, 0, 0, 0]],
-                           [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
-                            [0, 0, 0, 0]],
-                           [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
-                            [0, 2, 1, 1]]])
-    win_count = np.array([[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
-                           [0, 0, 0, 0]],
-                          [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
-                           [0, 0, 0, 0]],
-                          [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0],
-                           [0, 0, 3, 1]]]) """
+    parser = argparse.ArgumentParser(
+        description="A program learns to play Blackjack")
+    parser.add_argument("-d",
+                        nargs=1,
+                        type=int,
+                        required=True,
+                        help="the number of dices")
+    parser.add_argument("-s",
+                        nargs=1,
+                        type=int,
+                        required=True,
+                        help="the number of sides each dice")
+    parser.add_argument("-l",
+                        nargs=1,
+                        type=int,
+                        required=True,
+                        help="the lower bound of winning")
+    parser.add_argument("-u",
+                        nargs=1,
+                        type=int,
+                        required=True,
+                        help="the upper bound of winning")
+    parser.add_argument("-m",
+                        nargs=1,
+                        type=int,
+                        required=True,
+                        help="the hyperparameter")
+    parser.add_argument("-n",
+                        nargs=1,
+                        type=int,
+                        required=True,
+                        help="the number of times to play")
+    args = parser.parse_args()
 
-    g = BlackJack(n_dice=2,
-                  n_side=2,
-                  l_target=4,
-                  u_target=5,
-                  m=100,
-                  n_game=100000)
+    g = BlackJack(n_dice=args.d[0],
+                  n_side=args.s[0],
+                  l_target=args.l[0],
+                  u_target=args.u[0],
+                  m=args.m[0],
+                  n_game=args.n[0])
     g.play()
